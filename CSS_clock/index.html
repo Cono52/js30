@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS-clock</title>
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+    <meta name="viewport", content="width=device-width ,initial-scale=1.0">
+</head>
+<body>
+    <div class="clock-face">
+        <p class="tagline">To make time fly throw your watch out the window..</p>
+        <div class="second"></div>  
+        <div class="minute"></div>  
+        <div class="hour"></div>
+    </div>
+    <style>
+        body {
+            background:#018DED url(http://unsplash.it/1500/1000?image=1065);
+            font-family: 'Amatic SC', cursive;
+            background-size:cover;
+            background-position: center center;
+          	background-repeat:	no-repeat;
+        	background-attachment: fixed;
+        	background-size: cover;
+            display: block;
+            margin: 0;
+        }
+        
+        .clock-face {
+           position: absolute; 
+           text-align: center;
+           top: 50%;
+           left: 50%;
+           transform: translateX(-50%) translateY(-50%);
+           width: 300px;
+           height: 300px;
+           background-color: palegoldenrod;
+           border-radius: 1000px;
+        }
+
+        .tagline {
+            margin-top: 40%;
+            font-size: 2rem;
+        }
+
+        .second {
+            background-color: brown;
+            height: 2px;
+            width: 50%;
+            position: absolute;
+            top:50%;
+            transform: translateY(-50%);
+            transform-origin: 100%;
+            transition: all 0.3s cubic-bezier(0, 0, 0.76, 1.49);
+        } 
+
+        .minute {
+            background-color: green;
+            height: 2px;
+            width: 40%;
+            position: absolute;
+            top:50%;
+            left: 10%;
+            transform: translateY(-50%);
+            transform-origin: 100%;
+        }
+
+        .hour {
+            background-color: olive;
+            height: 2px;
+            width: 25%;
+            position: absolute;
+            top:50%;
+            left: 25%;
+            transform: translateY(-50%);
+            transform-origin: 100%;
+        }
+
+    </style>
+    <script>
+        let seconds = (new Date).getSeconds()+123
+        
+        getSecondsInDegs = () => {
+            return (((seconds++)/60) * 360) + 90
+        }
+
+        getMinsInDegs = () => {
+            return (((new Date).getMinutes()/(60)) * (360)) + 90
+        }
+
+         getHoursInDegs = () => {
+            return (((new Date).getHours()/(12)) * (360)) + 90
+        }
+
+        setInterval(() => {
+            const secondElem = document.getElementsByClassName("second")[0]
+            const minElem = document.getElementsByClassName("minute")[0]
+            const hourElem = document.getElementsByClassName("hour")[0]
+            hourElem.style.transform = `rotateZ(${getHoursInDegs()}deg)` 
+            minElem.style.transform = `rotate(${getMinsInDegs()}deg)`
+            secondElem.style.cssText = 'transform: rotateZ('+getSecondsInDegs()+'deg)'
+        }, 1000)
+    </script>
+</body>
+</html>
