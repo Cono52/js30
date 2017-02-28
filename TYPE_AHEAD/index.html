@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Type Ahead 👀</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+	<form class="search-form">
+		<input type="text" onforminput="updateText" class="search" placeholder="City or State">
+		<ul class="suggestions">
+			<li>Filter for a city</li>
+			<li>or a state</li>
+		</ul>
+	</form>
+<script>
+
+		let pos;
+		const search = document.querySelector('.search')
+		const suggestions = document.querySelector('.suggestions') 
+		const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+		const data = []
+
+		fetch(endpoint, {"method": "GET"})
+		.then(res => res.json())
+		.then(res => data.push(...res))
+
+		function updateText() {
+				if(this.value !== ""){
+					const matchArray = match(this.value, data)
+					const sortedByDistance = sortByDistance(matchArray)
+					const html = sortedByDistance.map(entry => {
+						const regex = new RegExp( this.value , 'gi')
+						const cityName = entry.city.replace(regex, `<span class="hl">${this.value.toLowerCase()}
+						</span>`)
+						const stateName = entry.state.replace(regex, `<span class="hl">${this.value.toLowerCase()}
+						</span>`)
+						return `
+						<li>
+								<span class="name">${cityName} , ${stateName}</span>
+								<span class="distance">Distance: ${Math.round(entry.distance)} KM</span>
+								<span class="population">Pop: ${entry.population}</span>
+						</li>
+						`
+					}).join(' ')
+				suggestions.innerHTML = html
+			} else{
+				suggestions.innerHTML = "";
+			}
+		}
+
+		function match(input, data) {
+				return data.filter( ob => {
+						const regex = new RegExp(input, 'gi')
+						return (ob.city.match(regex) || ob.state.match(regex))
+				})
+		}
+
+		(function getLocation() {
+				if(navigator.geolocation){
+						navigator.geolocation.getCurrentPosition((res) => {
+							pos = res;
+						}, (err) => {
+							console.log("something went wrong with location")
+						})
+				}
+		})()
+
+		function sortByDistance(cityList) {
+			let sorted;
+			if(cityList !== undefined) {
+					sorted = cityList.sort((a ,b) => {
+					const userDistFromA = distance(a.latitude, a.longitude, pos.coords.latitude, pos.coords.longitude, "K")
+					const userDistFromB = distance(b.latitude, b.longitude, pos.coords.latitude, pos.coords.longitude, "K")
+					return userDistFromA - userDistFromB
+				})
+			}
+			sorted.forEach( city => {
+				city['distance'] = distance(city.latitude, city.longitude, pos.coords.latitude, pos.coords.longitude, "K")
+				return city
+			})
+			return sorted
+		}
+
+		function distance(lat1, lon1, lat2, lon2, unit) {
+			let radlat1 = Math.PI * lat1/180
+			let radlat2 = Math.PI * lat2/180
+			let theta = lon1-lon2
+			let radtheta = Math.PI * theta/180
+			let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+			dist = Math.acos(dist)
+			dist = dist * 180/Math.PI
+			dist = dist * 60 * 1.1515
+			if (unit=="K") { dist = dist * 1.609344 }
+			if (unit=="N") { dist = dist * 0.8684 }
+			return dist
+		}
+
+		search.addEventListener('change', updateText)
+		search.addEventListener('keyup', updateText)
+		
+</script>
+</body>
+</html>
