@@ -8,10 +8,11 @@
 </head>
 <body>
     <div class="clock-face">
+        <p class="num">12</p>
         <p class="tagline">To make time fly throw your watch out the window..</p>
-        <div class="second"></div>  
-        <div class="minute"></div>  
-        <div class="hour"></div>
+        <div class="second hand"></div>  
+        <div class="minute hand"></div>  
+        <div class="hour hand"></div>
     </div>
     <style>
         body {
@@ -39,14 +40,29 @@
         }
 
         .tagline {
-            margin-top: 40%;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-90%);
             font-size: 2rem;
+            text-shadow: 0px 0px 3px gray;
+        }
+
+        .num {
+            font-size: 1.5rem;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .hand {
+            box-shadow: 0px 0px 5px grey;
         }
 
         .second {
             background-color: brown;
             height: 2px;
-            width: 50%;
+            width: 48%;
+            left: 2%;
             position: absolute;
             top:50%;
             transform: translateY(-50%);
