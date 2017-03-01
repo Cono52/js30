@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shift</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+</head>
+<body>
+    <h1>TODO_LIST</h1>
+    <div class="todo-list"></div>
+    <script>
+        const todoItems = [
+            {todo: "go buy some milk in shop", done: false},
+            {todo: "do a js tutorial", done: false},
+            {todo: "watch some nice videos", done: false},
+            {todo: "walk the dogs at 4pm", done: false},
+            {todo: "subscribe to a youtube channel", done: false},
+            {todo: "create a blog post about ES6", done: false},
+            {todo: "refactor some nasty code", done: false},
+            {todo: "make todo list for tomorrow", done: false},
+        ]
+
+        const todoList = document.querySelector(".todo-list")
+
+        todoList.innerHTML = todoItems.map( td => {
+            return `
+            <div class="todo-item">
+                <div>
+                    <input type="checkbox" name="todo">
+                </div>
+                <div>
+                    <span>${td.todo}</span>
+                </div>    
+            </div>`
+        }).join(' ')
+
+
+        const inputs = document.querySelectorAll("input")
+        
+        inputs.forEach(item => item.addEventListener('click', checkItems))
+
+        function checkItems(e) {
+            console.log(e.target.parentElement.parentElement.childNodes[3].textContent)
+        }
+
+    </script>
+</body>
+</html>
