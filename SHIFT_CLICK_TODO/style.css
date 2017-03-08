@@ -24,6 +24,7 @@ h1 {
 }
 
 .todo-list {
+    max-width: 750px;
     width: 70%;
     margin: auto;
     display: flex;

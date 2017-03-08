@@ -10,7 +10,7 @@
     <h1>TODO_LIST</h1>
     <div class="todo-list"></div>
     <script>
-        const todoItems = [
+        let todoItems = [
             {todo: "go buy some milk in shop", done: false},
             {todo: "do a js tutorial", done: false},
             {todo: "watch some nice videos", done: false},
@@ -21,27 +21,49 @@
             {todo: "make todo list for tomorrow", done: false},
         ]
 
-        const todoList = document.querySelector(".todo-list")
+        function setList(items){
+            const todoList = document.querySelector(".todo-list")
+            todoList.innerHTML = items.map( td => {
+                return `
+                <div class="todo-item">
+                    <div>
+                        <input type="checkbox" name="todo" ${(td.done)?`checked`: ``}>
+                    </div>
+                    <div>
+                        <p ${(td.done)? `style="text-decoration: line-through;"` : ``}>${td.todo}</p>
+                    </div>    
+                </div>`
+            }).join(' ')
 
-        todoList.innerHTML = todoItems.map( td => {
-            return `
-            <div class="todo-item">
-                <div>
-                    <input type="checkbox" name="todo">
-                </div>
-                <div>
-                    <span>${td.todo}</span>
-                </div>    
-            </div>`
-        }).join(' ')
-
-
-        const inputs = document.querySelectorAll("input")
+            //set events up each time
+            const inputs = document.querySelectorAll("input")
+            console.log(inputs)
+            inputs.forEach(item => item.addEventListener('click', checkItems))
+        }
         
-        inputs.forEach(item => item.addEventListener('click', checkItems))
+        setList(todoItems)
 
         function checkItems(e) {
-            console.log(e.target.parentElement.parentElement.childNodes[3].textContent)
+            const item = todoItems.findIndex(item => {
+               let el = e.target.parentElement.parentElement.childNodes[3]
+               return item.todo.replace(/\s/g,'') == el.textContent.replace(/\s/g,'') || item.todo == el.innerText.replace(/\s/g,'')
+            })
+            let shiftSet
+            if(todoItems[item].done) {
+                [todoItems[item].done , shiftSet] = [false, false] 
+            } else {
+                [todoItems[item].done, shiftSet] = [true, true]
+            }
+            if(e.shiftKey) {
+                let start = todoItems.findIndex(item => item.done === true)
+                todoItems.reverse()
+                let end = (todoItems.length)-todoItems.findIndex(item => item.done === true)
+                todoItems.reverse()                    
+                group = todoItems.slice(start, end)
+                group.forEach(item => item.done = shiftSet)
+               
+            }
+            setList(todoItems)
         }
 
     </script>
