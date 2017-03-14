@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shift</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+</head>
+<body>
+    <h1>TODO_LIST</h1>
+    <div class="todo-list"></div>
+    <script>
+        let todoItems = [
+            {todo: "go buy some milk in shop", done: false},
+            {todo: "do a js tutorial", done: false},
+            {todo: "watch some nice videos", done: false},
+            {todo: "walk the dogs at 4pm", done: false},
+            {todo: "subscribe to a youtube channel", done: false},
+            {todo: "create a blog post about ES6", done: false},
+            {todo: "refactor some nasty code", done: false},
+            {todo: "make todo list for tomorrow", done: false},
+        ]
+
+        function setList(items){
+            const todoList = document.querySelector(".todo-list")
+            todoList.innerHTML = items.map( td => {
+                return `
+                <div class="todo-item">
+                    <div>
+                        <input type="checkbox" name="todo" ${(td.done)?`checked`: ``}>
+                    </div>
+                    <div>
+                        <p ${(td.done)? `style="text-decoration: line-through;"` : ``}>${td.todo}</p>
+                    </div>    
+                </div>`
+            }).join(' ')
+
+            //set events up each time
+            const inputs = document.querySelectorAll("input")
+            console.log(inputs)
+            inputs.forEach(item => item.addEventListener('click', checkItems))
+        }
+        
+        setList(todoItems)
+
+        function checkItems(e) {
+            const item = todoItems.findIndex(item => {
+               let el = e.target.parentElement.parentElement.childNodes[3]
+               return item.todo.replace(/\s/g,'') == el.textContent.replace(/\s/g,'') || item.todo == el.innerText.replace(/\s/g,'')
+            })
+            let shiftSet
+            if(todoItems[item].done) {
+                [todoItems[item].done , shiftSet] = [false, false] 
+            } else {
+                [todoItems[item].done, shiftSet] = [true, true]
+            }
+            if(e.shiftKey) {
+                let start = todoItems.findIndex(item => item.done === true)
+                todoItems.reverse()
+                let end = (todoItems.length)-todoItems.findIndex(item => item.done === true)
+                todoItems.reverse()                    
+                group = todoItems.slice(start, end)
+                group.forEach(item => item.done = shiftSet)
+               
+            }
+            setList(todoItems)
+        }
+
+    </script>
+</body>
+</html>

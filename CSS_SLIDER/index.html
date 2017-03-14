@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slider</title>
+    <meta name="viewport", content="width=device-width ,initial-scale=1.0">
+</head>
+<body>
+    <h2 class="heading">Update CSS Variables with <span class="hl">JS</span></h2>
+
+    <div class="controls">
+
+        <div class="spacing-container">
+            <label for="spacing">Spacing</label>
+            <input type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+        </div>
+        
+        <div class="blur-container">
+            <label for="blur">Blur</label>
+            <input type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+        </div>
+        
+       <div class="base-container">
+            <label for="base">Base Color</label>
+           <input type="color" name="base" value="#ffc00">
+       </div>
+
+    </div>
+    <img src="http://unsplash.it/800/500?image=1050" alt="">
+
+    <style>
+        :root {
+            --base: #ffc600;
+            --spacing: 10px;
+            --blur: 10px;
+        }
+
+        img {
+            padding: var(--spacing);
+            filter: blur(var(--blur));
+            background: var(--base);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: block;
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+            background-color: #030335;
+        }
+
+        .heading {
+            margin: auto;
+            text-align: center;
+            margin: 5vh;
+            font-weight: bold;
+            font-size: 3rem;
+        }
+
+        .hl {
+            color: var(--base);
+        }
+
+        .controls {
+            width: 100%;
+            text-align: center;
+        }
+
+        .spacing-container, .blur-container, .base-container {
+            margin: 1rem;
+            margin-left: 33%;
+            margin-right: 33%;
+            padding: 10px;
+            font-weight: 100;
+            font-size: 1.2rem;
+            border-radius: 5px;
+        }
+
+        .spacing-container {
+            background-color: #222255;
+            color: antiquewhite;
+        }
+
+        .base-container{
+            background-color: #222255;
+            color: antiquewhite;
+        }
+
+        .blur-container {
+            background-color: #222255;
+            color: antiquewhite;
+        }
+
+       .spacing-container *{
+            display: block;
+        }
+
+        .spacing-container input {
+            margin: auto;
+            margin-top: 1rem;
+        }
+
+        .blur-container *{
+            display: block;
+        }
+
+        .blur-container input {
+            margin: auto;
+            margin-top: 1rem;
+        }
+        .base-container *{
+            display: block;
+        }
+
+        .base-container input {
+            margin: auto;
+            margin-top: 1rem;
+        }
+
+        input[type="range"]{
+            -webkit-appearance:none;
+            height:2px;
+            background: aqua;
+            background-position:center;
+            background-repeat:no-repeat;
+        }
+
+        textarea:focus, input:focus{
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb{
+            -webkit-appearance:none;
+            width:20px;
+            height:20px;
+            border-radius: 100%;
+            background: #434343;
+            position:relative;
+            border: 3px solid aquamarine;
+            z-index:3;
+            cursor: pointer;
+        }
+
+        
+
+
+    </style>
+    <script>
+        const input = document.querySelectorAll('.controls input')
+        
+        function handleUpdate() {
+            const suffix = this.dataset.sizing || '';
+            document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+        }
+
+        input.forEach(input => input.addEventListener('change', handleUpdate))
+        input.forEach(input => input.addEventListener('mousemove', handleUpdate))
+    </script>
+</body>
+</html>
