@@ -23,6 +23,8 @@ img {
 
 .paper {
     width: 60%;
+    max-width: 600px;
+    min-width: 400px;
     margin: auto;
     margin-top: 10vh;
     padding: 15px 30px 10px 30px;
